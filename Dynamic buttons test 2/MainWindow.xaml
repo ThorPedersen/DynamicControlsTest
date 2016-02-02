@@ -7,6 +7,8 @@
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="MainWindows">
+    <Grid Name="LayoutRoot">
+        <Button x:Name="Testbutton" Margin="550,20,0,0" Width="100px" Height="50px"  Content="Load events" VerticalAlignment="Top" Click="Load_events_click"/>
     <Grid Name="GridToSave">
         <Grid Name="ChoicesStackPanel" Height="100px" Margin="0,20,0,0" VerticalAlignment="Top" >
             <Button x:Name="BtnOs" Content="OS options" Margin="300,0,0,0" Width="100" Click="BtnOs_Click" Height="40" VerticalAlignment="Top" HorizontalAlignment="Center"/>
@@ -31,5 +33,6 @@
                 <Button x:Name="BtnVersion3" Margin="-300,0,0,0" Width="100px" Height="50px" Content="Version 3" Click="Version3_click" VerticalAlignment="Top"/>
             </Grid>
         </StackPanel>
+    </Grid>
     </Grid>
 </Window>
