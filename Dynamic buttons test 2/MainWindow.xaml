@@ -1,0 +1,35 @@
+﻿<Window x:Class="Dynamic_buttons_test_2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Dynamic_buttons_test_2"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="MainWindows">
+    <Grid Name="GridToSave">
+        <Grid Name="ChoicesStackPanel" Height="100px" Margin="0,20,0,0" VerticalAlignment="Top" >
+            <Button x:Name="BtnOs" Content="OS options" Margin="300,0,0,0" Width="100" Click="BtnOs_Click" Height="40" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+            <Button x:Name="BtnComputerName" Content="Computer Name" Margin="0,0,0,0" Width="100px" Click="BtnComputerName_Click" Height="40" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+            <Button x:Name="BtnVersions" Content="Version" Margin="-300,0,0,0" VerticalAlignment="Top" Width="100px" Click="BtnVersions_Click" Height="40" HorizontalAlignment="Center"/>
+            <Button x:Name="BtnSave" Content="Save Xaml" Margin="-600,0,0,0" VerticalAlignment="Top" Width="100px" Click="BtnSaveXaml_Click" Height="40" HorizontalAlignment="Center">
+            </Button>
+        </Grid>
+        <StackPanel Name="ResultsStackPanel" Margin="20,100,20,0">
+            <Grid Name ="OsStackPanel" Margin="0,20,0,0" Visibility="Collapsed">
+                <Button x:Name="BtnWindows7" Margin="300,0,0,0" Width="100px" Height="50px"  Content="Windows 7" VerticalAlignment="Top" Click="btnOs3_click"/>
+                <Button x:Name="BtnWindows8" Margin="0,0,0,0" Width="100px" Height="50px"  Content="Windows 8" VerticalAlignment="Top" Click="btnOs2_click"/>
+                <Button x:Name="BtnWindows10" Margin="-300,0,0,0" Width="100px" Height="50px"  Content="Windows10" VerticalAlignment="Top" Click="btnOs1_click"/>
+
+            </Grid>
+            <Grid Name ="ComputerNameStackPanel" HorizontalAlignment="Center" Margin="0,20,0,0" Visibility="Collapsed">
+                <TextBox>vlavla</TextBox>
+            </Grid>
+            <Grid Name ="VersionStackPanel" Margin="0,20,0,0" Visibility="Collapsed">
+                <Button x:Name="BtnVersion1" Margin="300,0,0,0" Width="100px" Height="50px" Content="Version 1" Click="Version1_click" VerticalAlignment="Top"/>
+                <Button x:Name="BtnVersion2" Margin="0,0,0,0" Width="100px" Height="50px" Content="Version 2" Click="Version2_click" VerticalAlignment="Top"/>
+                <Button x:Name="BtnVersion3" Margin="-300,0,0,0" Width="100px" Height="50px" Content="Version 3" Click="Version3_click" VerticalAlignment="Top"/>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Window>
