@@ -12,8 +12,12 @@
     <Grid Name="LayoutRoot">
         <Grid Name="GridToSave">
             <Grid.RowDefinitions>
-                <RowDefinition Height="50" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="20" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -22,30 +26,14 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+            <Label Name="ContentName" Grid.Column="2" FontSize="20" Content="Choose content" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
-            <Button x:Name="BtnOs" Content="OS options" Grid.Row="0" Grid.Column="0" Click="BtnOs_Click" Style="{DynamicResource RoundedButtonStyle}" />
-            <Button x:Name="BtnComputerName" Content="Computer Name" Grid.Row="0" Grid.Column="1" Click="BtnComputerName_Click" />
-            <Button x:Name="BtnVersions" Content="Version" Grid.Row="0" Grid.Column="2" Click="BtnVersions_Click" />
-            <Button x:Name="BtnSave" Content="Save Xaml" Grid.Column="3" Click="BtnSaveXaml_Click"/>
-            <Button x:Name="Testbutton" Grid.Row="0" Grid.Column="4" Content="Load events" Click="Load_events_click"/>
-
-            <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" Name="ResultsStackPanel" >
-                <Grid Name ="OsStackPanel" Margin="0,20,0,0" Visibility="Collapsed">
-                    <Button x:Name="BtnWindows7" Margin="300,0,0,0" Width="100px" Height="50px"  Content="Windows 7" VerticalAlignment="Top" Click="btnOs3_click"/>
-                    <Button x:Name="BtnWindows8" Margin="0,0,0,0" Width="100px" Height="50px"  Content="Windows 8" VerticalAlignment="Top" Click="btnOs2_click"/>
-                    <Button x:Name="BtnWindows10" Margin="-300,0,0,0" Width="100px" Height="50px"  Content="Windows10" VerticalAlignment="Top" Click="btnOs1_click"/>
-
-                </Grid>
-                <Grid Name="ComputerNameStackPanel" HorizontalAlignment="Center" Margin="0,20,0,0" Visibility="Collapsed">
-                    <TextBox>vlavla</TextBox>
-                </Grid>
-                <Grid Name ="VersionStackPanel" Margin="0,20,0,0" Visibility="Collapsed">
-                    <Button x:Name="BtnVersion1" Margin="300,0,0,0" Width="100" Height="50" Content="Version 1" Click="Version1_click" VerticalAlignment="Top"/>
-                    <Button x:Name="BtnVersion2" Margin="0,0,0,0" Width="100px" Height="50px" Content="Version 2" Click="Version2_click" VerticalAlignment="Top"/>
-                    <Button x:Name="BtnVersion3" Margin="-300,0,0,0" Width="100px" Height="50px" Content="Version 3" Click="Version3_click" VerticalAlignment="Top"/>
-                </Grid>
-            </StackPanel>
+            <Label Name="LblOperativeSystem" Grid.Column="1" Grid.Row="2" Content="Operative System"/>
+            <ComboBox Name="CbOperatingSystem" Grid.Column="2" Grid.Row="2" SelectionChanged="CbOperatingSystem_SelectionChanged"/>
+            <Grid  Name="LabelGrid" Grid.Column="1" Grid.Row="4"></Grid>
+            <Grid  Name="BoxGrid" Grid.Column="2" Grid.Row="4">
         </Grid>
+    </Grid>
     </Grid>
 
 </Page>

@@ -9,17 +9,13 @@
         Title="MainWindows">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50" />
+            <RowDefinition Height="auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        
-        <Button x:Name="button" Grid.Row="0"  Grid.Column="0" Content="Button"/>
-        <Button x:Name="button2" Grid.Row="0"  Grid.Column="1" Content="Button"/>
-        
+        <Label Name="Title" Content="Title of program" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" />
         <DockPanel Margin="0,20,0,0"  Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1">
             <Frame x:Name="MainFrame" />
         </DockPanel>
