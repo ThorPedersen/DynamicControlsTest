@@ -33,12 +33,14 @@ namespace Dynamic_buttons_test_2
         readonly OperatingSystemsModel _operatingSystemsModel = new OperatingSystemsModel();
         readonly OperatingSystemToolsModel _operatingSystemsModelTools = new OperatingSystemToolsModel();
 
-        private int _stackpanelRows;
+        private int _gridRow;
+        private readonly int _gridColumnLabel;
+        private readonly int _gridColumnObject;
 
         private readonly ComboBox _comboboxTools = new ComboBox();
         private readonly Label _lblTools = new Label();
 
-
+            
         public Page1()
         {
             InitializeComponent();
@@ -46,18 +48,20 @@ namespace Dynamic_buttons_test_2
             OperationSystemSetup();
             OperationSystemToolsSetup();
                 
-            _stackpanelRows = 5;
+            _gridRow = 5;
+            _gridColumnLabel = 1;
+            _gridColumnObject = 2;
 
             // First parameter is name for textbox and label, second is the content of the textbox
             //the third is the content of the label, and the fourth is the panel row 
-            TxtboxAndLabelSetup("ComputerName", "Some computername", "Computer Name", _stackpanelRows);
-            TxtboxAndLabelSetup("NetworkName", "Some networkname", "Network Name", _stackpanelRows);
+            TxtboxAndLabelSetup("ComputerName", "Some computername", "Computer Name", _gridRow);
+            TxtboxAndLabelSetup("NetworkName", "Some networkname", "Network Name", _gridRow);
 
             //Items for the combobox
             string[] comboboxItems = { "Tool 1", "Tool 2", "Tool 3", "Tool 4" };
             //first parameter is name for combobox and label, second is content of the label, third is the panel row
             //and the fourth is the items in the box, from the string array above
-            ComboboxAndLabelSetup("Newtool", "New tool", _stackpanelRows, comboboxItems);
+            ComboBoxAndLabelSetup("Newtool", "New tool", comboboxItems);
         }
 
         private static TextBox TxtboxSetup(string name, string content)
@@ -82,41 +86,50 @@ namespace Dynamic_buttons_test_2
 
         private ComboBox ComboBoxSetup(string name, string[] items)
         {
-            ComboBox StandardName = new ComboBox
+            ComboBox standardName = new ComboBox
             {
                 Name = name,
                 ItemsSource = items
             };
-            return StandardName;
+            return standardName;
         }
 
-        private void ComboboxAndLabelSetup(string name, string labelContent, int row, string[] items)
+        private void ComboBoxAndLabelSetup(string name, string labelContent, string[] items)
         {
-
-            AddStackPanel(name + "CBStackPanel", row, 2, ComboBoxSetup("txtbox" + name, items));
-            AddStackPanel(name + "LlbStackPanel", row, 1, LabelSetup("lbl" + name, labelContent));
-            _stackpanelRows++;
+            AddRow(LabelSetup("lbl" + name, labelContent));
+            AddRow(ComboBoxSetup("ComboBox" + name, items));
+            _gridRow++;
         }
+        //private void ChildComboBoxAndLabelSetup(string name, string labelContent, string[] items, Object objectName, Object labelName)
+        //{
+        //    AddRow(LabelSetup("lbl" + name, labelContent));
+        //    AddRow(ComboBoxSetup("ComboBox" + name, items));
+        //    _gridRow++;
+        //}
 
         private void TxtboxAndLabelSetup(string name, string textboxContent, string labelContent, int row)
         {
-            AddStackPanel(name + "TxtBoxStackPanel", row, 2, TxtboxSetup("txtbox" + name, textboxContent));
-            AddStackPanel(name + "LlbStackPanel", row, 1, LabelSetup("lbl" + name, labelContent));
-            _stackpanelRows++;
+            AddRow(LabelSetup("lbl" + name, labelContent));
+            AddRow(TxtboxSetup("TxtBox" + name, textboxContent));
+            _gridRow++;
         }
+        private void AddRow(object gridControl)
+        {
+            RowDefinition newRow = new RowDefinition(); 
+            newRow.Height = new GridLength(40);
+            GridToSave.RowDefinitions.Add(newRow);
 
-        private void AddStackPanel(string stackPanelName, int stackPanelRow, int stackPanelColumn, object Object)
-        {   
-            DockPanel dockPanel = new DockPanel();
-            dockPanel.Name = stackPanelName;
-
-            GridToSave.Children.Add(dockPanel);
-            Grid.SetRow(dockPanel, stackPanelRow);
-            Grid.SetColumn(dockPanel, stackPanelColumn);       
-
-            dockPanel.Children.Add((UIElement) Object);
+            Grid.SetRow((UIElement)gridControl, _gridRow);
+            if (gridControl is Label)
+            {
+                Grid.SetColumn((UIElement)gridControl, _gridColumnLabel);
+            }
+            else
+            {
+                Grid.SetColumn((UIElement)gridControl, _gridColumnObject);
+            }
+            GridToSave.Children.Add((UIElement)gridControl);
         }
-
         private void OperationSystemSetup()
         {
             OperationSystemsList.Add("");
