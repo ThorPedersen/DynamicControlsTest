@@ -16,8 +16,8 @@
                 <RowDefinition Height="20" />
                 <RowDefinition Height="30" />
                 <RowDefinition Height="20" />
-                <RowDefinition Height="30" />
                 <RowDefinition Height="20" />
+                <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -30,9 +30,8 @@
 
             <Label Name="LblOperativeSystem" Grid.Column="1" Grid.Row="2" Content="Operative System"/>
             <ComboBox Name="CbOperatingSystem" Grid.Column="2" Grid.Row="2" SelectionChanged="CbOperatingSystem_SelectionChanged"/>
-            <Grid  Name="LabelGrid" Grid.Column="1" Grid.Row="4"></Grid>
-            <Grid  Name="BoxGrid" Grid.Column="2" Grid.Row="4">
-        </Grid>
+            <DockPanel Name="LabelGrid" Grid.Column="1" Grid.Row="4"/>
+            <DockPanel  Name="BoxGrid" Grid.Column="2" Grid.Row="4"/>
     </Grid>
     </Grid>
 

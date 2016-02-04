@@ -16,7 +16,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Label Name="Title" Content="Title of program" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" />
-        <DockPanel Margin="0,20,0,0"  Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1">
+        <DockPanel Margin="0,20,0,0"  Grid.Column="0" Grid.Row="1">
             <Frame x:Name="MainFrame" />
         </DockPanel>
 

@@ -30,8 +30,6 @@ namespace Dynamic_buttons_test_2
             InitializeComponent();
 
             MainFrame.Navigate(new Page1());
-
-        }
-        
+        }     
     }
 }
