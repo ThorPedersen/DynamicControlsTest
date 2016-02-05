@@ -1,5 +1,6 @@
 ﻿using Dynamic_buttons_test_2.Models;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.SqlClient;
@@ -27,31 +28,18 @@ namespace Dynamic_buttons_test_2
 
     public partial class Page1
     {
-        public ObservableCollection<string> OperationSystemsList = new ObservableCollection<string>();
-        public ObservableCollection<string> ToolsSystemsList = new ObservableCollection<string>();
-
-        public ObservableCollection<ComboBoxIdentity> ComboExList = new ObservableCollection<ComboBoxIdentity>();
-        public ObservableCollection<LabelIdentity> LabelsList = new ObservableCollection<LabelIdentity>();
-
-        readonly OperatingSystemsModel _operatingSystemsModel = new OperatingSystemsModel();
-        readonly OperatingSystemToolsModel _operatingSystemsModelTools = new OperatingSystemToolsModel();
+        public ObservableCollection<ComboBoxIdentity> ComboBoxIdentityList = new ObservableCollection<ComboBoxIdentity>();
+        public ObservableCollection<LabelIdentity> LabelIdentityList = new ObservableCollection<LabelIdentity>();
 
         private int _gridRow;
         private readonly int _gridColumnLabel;
         private readonly int _gridColumnObject;
 
-        private readonly ComboBox _comboboxTools = new ComboBox();
-        private readonly Label _lblTools = new Label();
-
-
         public Page1()
         {
             InitializeComponent();
 
-            OperationSystemSetup();
-            OperationSystemToolsSetup();
-
-            _gridRow = 5;
+            _gridRow = 2;
             _gridColumnLabel = 1;
             _gridColumnObject = 2;
 
@@ -62,25 +50,26 @@ namespace Dynamic_buttons_test_2
 
             //Items for the combobox
             List<ComboBoxOption> bindingList = new List<ComboBoxOption>();
-            BindingListAdding("", "", bindingList, "");
-            BindingListAdding("Test1", "Test1", bindingList, "");
-            BindingListAdding("Test2", "Test2", bindingList, "");
-            BindingListAdding("Test3", "Test3", bindingList, "");
+            List<UIElementCollection> comboBoxChildren = new List<UIElementCollection>();
+            BindingListAdding("0", "", "", bindingList, "");
+            BindingListAdding("1", "Test1", "Test1", bindingList, "");
+            BindingListAdding("2", "Test2", "Test2", bindingList, "");
+            BindingListAdding("3", "Test3", "Test3", bindingList, "");
             //first parameter is name for combobox and label, second is content of the label, third is the combobox items
             //fourth is true if it is a child, fifth is unused ID
             ComboBoxAndLabelSetup("Oldtool", "Old tool", bindingList, false, "1111");
 
             //Items for the combobox
             List<ComboBoxOption> bindingList2 = new List<ComboBoxOption>();
-            BindingListAdding("", "", bindingList2, "");
-            BindingListAdding("Testafter1", "Testafter1", bindingList2, "Test1");
-            BindingListAdding("Testafter2", "Testafter2", bindingList2, "");
-            BindingListAdding("Testafter3", "Testafter3", bindingList2, "");
+            BindingListAdding("4", "", "", bindingList2, "");
+            BindingListAdding("5", "Testafter1", "Testafter1", bindingList2, "1");
+            BindingListAdding("6", "Testafter2", "Testafter2", bindingList2, "");
+            BindingListAdding("7", "Testafter3", "Testafter3", bindingList2, "");
             //first parameter is name for combobox and label, second is content of the label, third is the combobox items
             //fourth is true if it is a child, fifth is unused ID
             ComboBoxAndLabelSetup("Newtool", "New tool", bindingList2, true, "2222");
 
-            //foreach (var box in ComboExList)
+            //foreach (var box in ComboBoxIdentityList)
             //{
             //    MessageBox.Show("Id: " + box.Id);
             //}
@@ -103,7 +92,7 @@ namespace Dynamic_buttons_test_2
                 Content = content
             };
 
-            LabelsList.Add(new LabelIdentity { Label = labelName });
+            LabelIdentityList.Add(new LabelIdentity { Label = labelName });
 
             if (child)
             {
@@ -112,9 +101,9 @@ namespace Dynamic_buttons_test_2
 
             return labelName;
         }
-        private ComboBox AddComboBox(string id, List<ComboBoxOption> bindingList, bool child, string name)
+        private ComboBox AddComboBox(string id, List<ComboBoxOption> bindingList, bool child, string name )
         {
-            ComboBox test = new ComboBox
+            ComboBox comboBox = new ComboBox
             {
                 Name = name,
                 ItemsSource = bindingList,
@@ -122,29 +111,38 @@ namespace Dynamic_buttons_test_2
                 SelectedValuePath = "Value",
                 SelectedIndex = 0
             };
-
-            ComboExList.Add(new ComboBoxIdentity { Id = id, ComboBox = test });
+            ComboBoxIdentityList.Add(new ComboBoxIdentity { Id = id, ComboBox = comboBox, ComboBoxChildren = new List<UIElement>() });
             if (child)
             {
-                test.Visibility = Visibility.Collapsed;
-                test.SelectionChanged += comboChild_SelectionChanged;
+                
+                comboBox.Visibility = Visibility.Collapsed;
+                comboBox.SelectionChanged += comboChild_SelectionChanged;
             }
             else
             {
-                test.SelectionChanged += combo_SelectionChanged;
+                comboBox.SelectionChanged += combo_SelectionChanged;
             }
 
-            return test;
+            return comboBox;
         }
-        private void BindingListAdding(string displayName, string value, List<ComboBoxOption> bindingList, string parentId)
+        private void BindingListAdding(string id, string displayName, string value, List<ComboBoxOption> bindingList, string parentId)
         {
-            bindingList.Add(new ComboBoxOption { DisplayName = displayName, Value = value, ParentId = parentId });
+            bindingList.Add(new ComboBoxOption { Id=id, DisplayName = displayName, Value = value, ParentId = parentId });
         }
 
         private void ComboBoxAndLabelSetup(string name, string labelContent, List<ComboBoxOption> items, bool childOrNOrmal, string id)
         {
-            AddRow(AddLabel("lbl" + name, labelContent, childOrNOrmal));
-            AddRow(AddComboBox(id, items, childOrNOrmal, "CB" + name));
+            if (childOrNOrmal)
+            {
+                AddRow(AddLabel("lbl" + name, labelContent, childOrNOrmal));
+                AddRow(AddComboBox(id, items, childOrNOrmal, "CB" + name));
+            }
+            else
+            {
+                AddRow(AddLabel("lbl" + name, labelContent, childOrNOrmal));
+                AddRow(AddComboBox(id, items, childOrNOrmal, "CB" + name));
+            }
+            
             _gridRow++;
         }
 
@@ -156,13 +154,25 @@ namespace Dynamic_buttons_test_2
         private void combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox currentComboBox = (ComboBox)sender;
-            string value = (string)currentComboBox.SelectedValue;
+            //string value = (string)currentComboBox.SelectedValue;
+            ComboBoxOption comboBoxOption = (ComboBoxOption) currentComboBox.SelectedItem;
+            ComboBoxIdentity claus = ComboBoxIdentityList.First(x => x.ComboBox == currentComboBox);
+
+            foreach (UIElement thor in claus.ComboBoxChildren)
+            {
+                thor.Visibility = Visibility.Collapsed;
+            }
+            claus.ComboBoxChildren.Clear();
 
             ComboBoxIdentity ex = null;
 
-            foreach (ComboBoxIdentity boxIdentity in ComboExList)
+            foreach (ComboBoxIdentity boxIdentity in ComboBoxIdentityList)
             {
-                if (boxIdentity.ComboBox.ItemsSource.Cast<ComboBoxOption>().Any(x => x.ParentId == value))
+                //if (boxIdentity.ParentOptionId == claus2.Id)
+                //{
+                //    ex = boxIdentity;
+                //}
+                if (boxIdentity.ComboBox.ItemsSource.Cast<ComboBoxOption>().Any(x => x.ParentId == comboBoxOption.Id))
                 {
                     ex = boxIdentity;
                 }
@@ -173,13 +183,19 @@ namespace Dynamic_buttons_test_2
 
                     string name = ex.ComboBox.Name;
                     var removed = name.Remove(0, 2);
-                    var results = LabelsList.First(x => x.Label.Name == "lbl" + removed);
+                    var results = LabelIdentityList.First(x => x.Label.Name == "lbl" + removed);
 
                     UIElement label = results.Label;
                     label.Visibility = Visibility.Visible;
 
+                    claus.ComboBoxChildren.Add(box);
+                    claus.ComboBoxChildren.Add(label);
+
+
                     break;
                 }
+                //If combobox changes selected value then childboxes with parenId's that are equal to that value must become visible.collapsed
+                
             }         
         }
 
@@ -197,105 +213,16 @@ namespace Dynamic_buttons_test_2
             GridToSave.RowDefinitions.Add(newRow);
 
             Grid.SetRow((UIElement)gridControl, _gridRow);
-            if (gridControl is Label)
+            var label = gridControl as Label;
+            if (label != null)
             {
-                Grid.SetColumn((UIElement)gridControl, _gridColumnLabel);
+                Grid.SetColumn(label, _gridColumnLabel);
             }
             else
             {
                 Grid.SetColumn((UIElement)gridControl, _gridColumnObject);
             }
             GridToSave.Children.Add((UIElement)gridControl);
-        }
-        private void OperationSystemSetup()
-        {
-            OperationSystemsList.Add("");
-            OperationSystemsList.Add("Windows 7");
-            OperationSystemsList.Add("Windows 8");
-            OperationSystemsList.Add("Windows best");
-            CbOperatingSystem.ItemsSource = OperationSystemsList;
-        }
-        private void OperationSystemToolsSetup()
-        {
-            _comboboxTools.SelectionChanged += _comboboxTools_SelectionChanged;
-        }
-        private void ToolsContainer(string windowsVersion)
-        {
-            if (ToolsSystemsList != null)
-            {
-                ToolsSystemsList.Clear();
-                if (windowsVersion != "")
-                {
-                    ToolsSystemsList.Add("Windows " + windowsVersion + " stuff");
-                    ToolsSystemsList.Add("Windows " + windowsVersion + " stuff 2");
-                    ToolsSystemsList.Add("Windows " + windowsVersion + " stuff 3");
-                }
-            }
-
-            _comboboxTools.Name = "CbTools";
-            _comboboxTools.ItemsSource = ToolsSystemsList;
-            _comboboxTools.SelectedIndex = 0;
-
-            _lblTools.Content = "Tools";
-
-            if (!BoxGrid.Children.Contains(_comboboxTools))
-            {
-                this.BoxGrid.Children.Add(_comboboxTools);
-                this.LabelGrid.Children.Add(_lblTools);
-            }
-        }
-        private void _comboboxTools_SelectionChanged(object sender, EventArgs e)
-        {
-
-            if (_comboboxTools.SelectedIndex != -1)
-            {
-                //ComboBox test = (ComboBox)sender;
-                //_operatingSystemsModelTools.OperativeSystemTools = test.SelectedValue.ToString();
-                _operatingSystemsModelTools.OperativeSystemTools = _comboboxTools.SelectedValue.ToString();
-
-                MessageBox.Show("OperationsToolModel: " + _operatingSystemsModelTools.OperativeSystemTools);
-            }
-        }
-        private void CbOperatingSystem_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            _operatingSystemsModel.OperativeSystem = CbOperatingSystem.SelectedValue.ToString();
-
-            if (_operatingSystemsModel.OperativeSystem != "")
-            {
-                MessageBox.Show("OperationsModel: " + _operatingSystemsModel.OperativeSystem);
-            }
-            if (_operatingSystemsModel.OperativeSystem == "Windows 7")
-            {
-                ToolsContainer("7");
-            }
-            if (_operatingSystemsModel.OperativeSystem == "Windows 8")
-            {
-                ToolsContainer("8");
-            }
-            if (_operatingSystemsModel.OperativeSystem == "Windows best")
-            {
-                ToolsContainer("best");
-            }
-            VisibilityForToolsContainer();
-        }
-        private void VisibilityForToolsContainer()
-        {
-            if (_operatingSystemsModel.OperativeSystem == "" || _operatingSystemsModel == null)
-            {
-                _lblTools.Visibility = Visibility.Collapsed;
-                _comboboxTools.Visibility = Visibility.Collapsed;
-            }
-            else
-            {
-                _lblTools.Visibility = Visibility.Visible;
-                _comboboxTools.Visibility = Visibility.Visible;
-            }
-            //if a combobox has a parentId, and its parent's selected.value is null or empty, then it must be visible.collapsed
-            //else it is visible.visible.
-            //OR
-            //if a combobox has no parentID and its selected.value is null or empty then all its children must be visible.collapsed
-            //if they are all visible.visible.
-
         }
     }
 }

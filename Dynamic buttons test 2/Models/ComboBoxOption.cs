@@ -8,6 +8,7 @@ namespace Dynamic_buttons_test_2.Models
 {
     public class ComboBoxOption
     {
+        public string Id { get; set; }
         public string DisplayName { get; set; }
         public string Value { get; set; }
         public string ParentId { get; set; }
