@@ -73,11 +73,11 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\ComboEx.cs" />
-    <Compile Include="Models\LabelEx.cs" />
+    <Compile Include="Models\ComboBoxIdentity.cs" />
+    <Compile Include="Models\LabelIdentity.cs" />
     <Compile Include="Models\OperatingSystemsModel.cs" />
     <Compile Include="Models\OperatingSystemToolsModel.cs" />
-    <Compile Include="Models\Options.cs" />
+    <Compile Include="Models\ComboBoxOption.cs" />
     <Compile Include="Page1.xaml.cs">
       <DependentUpon>Page1.xaml</DependentUpon>
     </Compile>
