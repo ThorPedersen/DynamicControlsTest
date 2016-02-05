@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -23,12 +24,16 @@ namespace Dynamic_buttons_test_2
     /// <summary>
     /// Interaction logic for Page1.xaml
     /// </summary>
+
     public partial class Page1
     {
         public ObservableCollection<string> OperationSystemsList = new ObservableCollection<string>();
         public ObservableCollection<string> ToolsSystemsList = new ObservableCollection<string>();
 
         public ObservableCollection<StackPanel> StackPanelList = new ObservableCollection<StackPanel>();
+
+        public ObservableCollection<ComboBox> ComboBoxList = new ObservableCollection<ComboBox>();
+        public ObservableCollection<ComboEx> ComboboxesList = new ObservableCollection<ComboEx>();
 
         readonly OperatingSystemsModel _operatingSystemsModel = new OperatingSystemsModel();
         readonly OperatingSystemToolsModel _operatingSystemsModelTools = new OperatingSystemToolsModel();
@@ -40,14 +45,14 @@ namespace Dynamic_buttons_test_2
         private readonly ComboBox _comboboxTools = new ComboBox();
         private readonly Label _lblTools = new Label();
 
-            
+
         public Page1()
         {
             InitializeComponent();
 
             OperationSystemSetup();
             OperationSystemToolsSetup();
-                
+
             _gridRow = 5;
             _gridColumnLabel = 1;
             _gridColumnObject = 2;
@@ -58,10 +63,27 @@ namespace Dynamic_buttons_test_2
             TxtboxAndLabelSetup("NetworkName", "Some networkname", "Network Name", _gridRow);
 
             //Items for the combobox
-            string[] comboboxItems = { "Tool 1", "Tool 2", "Tool 3", "Tool 4" };
+            //string[] comboboxItems = new ComboEx { "", "Tool 1", "Tool 2", "Tool 3", "Tool 4" };
             //first parameter is name for combobox and label, second is content of the label, third is the panel row
             //and the fourth is the items in the box, from the string array above
-            ComboBoxAndLabelSetup("Newtool", "New tool", comboboxItems);
+            //ComboBoxAndLabelSetup("Newtool", "New tool", comboboxItems);
+
+            //Items for the combobox
+            string[] comboboxItems2 = { "", "Old Tool 1", "Old Tool 2", "Old Tool 3" };
+            //first parameter is name for combobox and label, second is content of the label, third is the combobox items, fourth is true if it is a child
+            //and the fourth is the items in the box, from the string array above
+            ComboBoxAndLabelSetup("Oldtool", "Old tool", comboboxItems2, false);
+
+            //Items for the combobox
+            string[] comboboxItems3 = { "", "Child for old tool 1", "Child for old tool 2", "Child for old tool 3" };
+            //first parameter is name for combobox and label, second is content of the label, third is the combobox items, fourth is true if it is a child
+            //and the fourth is the items in the box, from the string array above
+            ChildComboBoxAndLabelSetup("Oldchildtool", "Old child tool", comboboxItems3, true);
+
+            foreach (var box in ComboboxesList)
+            {
+                MessageBox.Show("Id: " + box.Id);
+            }
         }
 
         private static TextBox TxtboxSetup(string name, string content)
@@ -84,26 +106,161 @@ namespace Dynamic_buttons_test_2
             return labelName;
         }
 
-        private ComboBox ComboBoxSetup(string name, string[] items)
+        //private ComboBox ComboBoxSetup(string name, string[] items)
+        //{
+        //    ComboBox standardName = new ComboBox
+        //    {
+        //        Name = name,
+        //        ItemsSource = items
+        //    };
+
+        //    ComboEx combo = new ComboEx();
+        //    string guid = Guid.NewGuid().ToString();
+        //    combo.Combo = standardName;
+        //    combo.Id = guid;
+
+        //    ComboboxesList.Add(combo);
+        //    ComboBoxList.Add(standardName);
+
+        //    standardName.SelectionChanged += combo_SelectionChanged;
+
+        //    return standardName;
+        //}
+        private ComboBox CBnormal(string id, List<Options> bindingList, bool child)
         {
-            ComboBox standardName = new ComboBox
+            ComboBox test = new ComboBox();
+            test.ItemsSource = bindingList;
+            test.DisplayMemberPath = "DisplayName";
+            test.SelectedValuePath = "Value";
+
+            ComboboxesList.Add(new ComboEx { Id = id, Combo = test });
+            if (child)
             {
-                Name = name,
-                ItemsSource = items
-            };
-            return standardName;
+                test.Visibility = Visibility.Collapsed;
+                test.SelectionChanged += comboChild_SelectionChanged;
+            }
+            else
+            {
+                test.SelectionChanged += combo_SelectionChanged;
+            }
+
+            return test;
         }
 
-        private void ComboBoxAndLabelSetup(string name, string labelContent, string[] items)
+        private List<Options> BindinglistCreation()
         {
+            List<Options> bindingList = new List<Options>();
+            return bindingList;
+        }
+        private List<Options> BindingListAdding(string displayName, string value, string parentId, List<Options> BindingList)
+        {
+            BindingList.Add(new Options { DisplayName = displayName, Value = value, ParentId = parentId });
+
+            return BindingList;
+        }
+        private void ComboBoxAndLabelSetup(string name, string labelContent, string[] items, bool childOrNOrmal)
+        {
+            List<Options> bindingList = new List<Options>();
+            bindingList.Add(new Options { DisplayName = "Test1", Value = "Test1", ParentId = "" });
+
+            bindingList.Add(new Options { DisplayName = "Test2", Value = "Test2", ParentId = "" });
+
+            bindingList.Add(new Options { DisplayName = "Test3", Value = "Test3", ParentId = "" });
+
             AddRow(LabelSetup("lbl" + name, labelContent));
-            AddRow(ComboBoxSetup("ComboBox" + name, items));
+            AddRow(CBnormal("5555", bindingList, childOrNOrmal));
             _gridRow++;
         }
-        //private void ChildComboBoxAndLabelSetup(string name, string labelContent, string[] items, Object objectName, Object labelName)
+        private void ChildComboBoxAndLabelSetup(string name, string labelContent, string[] items, bool childOrNOrmal)
+        {
+            List<Options> bindingList = new List<Options>();
+            bindingList.Add(new Options { DisplayName = "lort1", Value = "Testa1", ParentId = "Test1" });
+
+            bindingList.Add(new Options { DisplayName = "lort2", Value = "Testa2", ParentId = "" });
+
+            bindingList.Add(new Options { DisplayName = "lort3", Value = "Testa3", ParentId = "" });
+
+            AddRow(LabelSetup("lbl" + name, labelContent));
+            AddRow(CBnormal("6717", bindingList, childOrNOrmal));
+            _gridRow++;
+        }
+        //string name, string[] items, ComboBox comboParent, object parentItem
+        //private ComboBox ComboBoxChildSetup()
+        //{
+        //    //ComboBox standardName = new ComboBox
+        //    //{
+        //    //    Name = name,
+        //    //    ItemsSource = items,
+        //    //};
+        //    //ComboEx combo = new ComboEx();
+        //    //Guid guid = Guid.NewGuid();
+        //    //combo.Combo = standardName;
+        //    //combo.Id = guid;
+
+        //    //ComboboxesList.Add(combo);
+        //    //ComboBoxList.Add(standardName);
+
+        //    return standardName;
+        //}
+        void comboChild_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //ComboBox curCombo = (ComboBox)sender;
+            //Options curOptions = (Options)curCombo.SelectedItem;
+
+            //ComboEx test = ComboboxesList.First(x => x.Id == curOptions.ParentId);
+
+            //UIElement test2 = test.Combo;
+
+            //test2.Visibility = Visibility.Visible;
+        }
+        void combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //ComboBox curCombo = (ComboBox)sender;
+            //Options curOptions = (Options)curCombo.SelectedItem;
+            ComboBox curCombo = (ComboBox)sender;
+            string value = (string) curCombo.SelectedValue;
+
+            ComboEx test = null;
+
+            foreach (ComboEx claus in ComboboxesList)
+            {
+                if (claus.Combo.ItemsSource.Cast<Options>().Any(thor => thor.ParentId == value))
+                {
+                    test = claus;
+                    UIElement test2 = test.Combo;
+                    test2.Visibility = Visibility.Collapsed;
+                }
+                if (test != null)
+                {
+                    UIElement test2 = test.Combo;
+                    test2.Visibility = Visibility.Visible;
+                    break;
+                }
+            }
+
+            //Get the sender ID
+            //Search comboboxeslist for box with parentId == ID
+
+            //ComboEx test = ComboboxesList.First(x => x.Id == curOptions.ParentId);
+
+            //if (test?.Combo != null)
+            //{
+            //    UIElement test2 = test.Combo;
+            //    test2.Visibility = Visibility.Visible;
+            //}
+        }
+        //private void ComboBoxAndLabelSetup(string name, string labelContent, string[] items)
         //{
         //    AddRow(LabelSetup("lbl" + name, labelContent));
         //    AddRow(ComboBoxSetup("ComboBox" + name, items));
+        //    _gridRow++;
+        //}
+        ////Needs fixing
+        //private void ChildComboBoxAndLabelSetup(string name, string labelContent, string[] items)
+        //{
+        //    AddRow(LabelSetup("lbl" + name, labelContent));
+        //    //"ComboBox" + name, items
+        //    AddRow(ComboBoxChildSetup());
         //    _gridRow++;
         //}
 
@@ -115,8 +272,9 @@ namespace Dynamic_buttons_test_2
         }
         private void AddRow(object gridControl)
         {
-            RowDefinition newRow = new RowDefinition(); 
-            newRow.Height = new GridLength(40);
+            RowDefinition newRow = new RowDefinition();
+            //newRow.Height = new GridLength(40);
+            newRow.Height = GridLength.Auto;
             GridToSave.RowDefinitions.Add(newRow);
 
             Grid.SetRow((UIElement)gridControl, _gridRow);
@@ -179,7 +337,6 @@ namespace Dynamic_buttons_test_2
                 MessageBox.Show("OperationsToolModel: " + _operatingSystemsModelTools.OperativeSystemTools);
             }
         }
-
         private void CbOperatingSystem_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             _operatingSystemsModel.OperativeSystem = CbOperatingSystem.SelectedValue.ToString();
@@ -214,6 +371,12 @@ namespace Dynamic_buttons_test_2
                 _lblTools.Visibility = Visibility.Visible;
                 _comboboxTools.Visibility = Visibility.Visible;
             }
+            //if a combobox has a parentId, and its parent's selected.value is null or empty, then it must be visible.collapsed
+            //else it is visible.visible.
+            //OR
+            //if a combobox has no parentID and its selected.value is null or empty then all its children must be visible.collapsed
+            //if they are all visible.visible.
+
         }
     }
 }
