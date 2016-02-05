@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\ComboEx.cs" />
+    <Compile Include="Models\LabelEx.cs" />
     <Compile Include="Models\OperatingSystemsModel.cs" />
     <Compile Include="Models\OperatingSystemToolsModel.cs" />
     <Compile Include="Models\Options.cs" />
