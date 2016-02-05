@@ -7,16 +7,16 @@ using System.Windows.Controls;
 
 namespace Dynamic_buttons_test_2.Models
 {
-    public class LabelEx
+    public class LabelIdentity
     {
         public Label Label { get; set; }
 
-        public LabelEx(Label label)
+        public LabelIdentity(Label label)
         {
             Label = label;
         }
 
-        public LabelEx()
+        public LabelIdentity()
         {
 
         }

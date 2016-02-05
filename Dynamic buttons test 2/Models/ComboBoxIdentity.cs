@@ -8,19 +8,19 @@ using System.Windows.Controls;
 
 namespace Dynamic_buttons_test_2.Models
 {
-    public class ComboEx
+    public class ComboBoxIdentity
     {
         public string Id { get; set; }
 
-        public ComboBox Combo { get; set; }
+        public ComboBox ComboBox { get; set; }
 
-        public ComboEx(string id, ComboBox combo)
+        public ComboBoxIdentity(string id, ComboBox comboBox)
         {
             Id = id;
-            Combo = combo;
+            ComboBox = comboBox;
         }
 
-        public ComboEx()
+        public ComboBoxIdentity()
         {
             
         }
