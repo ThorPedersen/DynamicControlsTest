@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Dynamic_buttons_test_2"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="MainWindows">
+        Title="MainWindow">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
@@ -16,7 +16,10 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Label Name="Title" Content="Title of program" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40" />
-        <DockPanel Margin="0,20,0,0"  Grid.Column="0" Grid.Row="1">
+        <DockPanel>
+            <DockPanel.Margin>0,20,0,0</DockPanel.Margin>
+            <Grid.Row>1</Grid.Row>
+            <Grid.Column>0</Grid.Column>
             <Frame x:Name="MainFrame" />
         </DockPanel>
 
