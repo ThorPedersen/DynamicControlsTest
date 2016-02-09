@@ -11,10 +11,5 @@ namespace Dynamic_buttons_test_2.Models
         public string Id { get; set; }
         public string DisplayName { get; set; }
         public string Value { get; set; }
-        public string OptionParentId { get; set; }
-        public ComboBoxOption()
-        {
-            
-        }
     }
 }

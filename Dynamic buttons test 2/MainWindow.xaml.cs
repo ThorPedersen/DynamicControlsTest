@@ -16,20 +16,32 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml;
+using Dynamic_buttons_test_2.Views;
 
 namespace Dynamic_buttons_test_2
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow
     {
-
         public MainWindow()
         {
             InitializeComponent();
+        }
 
+        private void Page2_Click(object sender, RoutedEventArgs e)
+        {
+            MainFrame.Navigate(new Page2());
+            Page2.Background = Brushes.SkyBlue;
+            Page1.Background = Brushes.Gainsboro;
+        }
+
+        private void Page1_Click(object sender, RoutedEventArgs e)
+        {
             MainFrame.Navigate(new Page1());
-        }     
+            Page2.Background = Brushes.Gainsboro;
+            Page1.Background = Brushes.SkyBlue;
+        }
     }
 }

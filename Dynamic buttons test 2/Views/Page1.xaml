@@ -8,8 +8,15 @@
       d:DesignHeight="400" d:DesignWidth="800"
 
       Title="Page1">
-    
+
     <Grid Name="LayoutRoot">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        
         <Grid Name="GridToSave">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
@@ -23,8 +30,9 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Label Name="ContentName" Grid.Column="2" FontSize="20" Content="Choose content" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
+
+            <Button Name="ButtonXmlSave" Grid.Column="0" Grid.Row="0" Content="Save to xml" Width="100" HorizontalAlignment="Right" Margin="0,100,40,0" Height="40" Click="ButtonXmlSave_OnClick"/>
 
     </Grid>
-    </Grid>
-
 </Page>
