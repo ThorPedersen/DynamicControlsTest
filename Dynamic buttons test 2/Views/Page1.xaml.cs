@@ -228,7 +228,6 @@ namespace Dynamic_buttons_test_2
             {
                 if (comboBoxOption.Id == textBoxIdentity.ParentOptionId)
                 {
-                    //identity = boxIdentity;
                     UIElement box = textBoxIdentity.TextBox;
                     box.Visibility = Visibility.Visible;
 
@@ -249,7 +248,6 @@ namespace Dynamic_buttons_test_2
             {
                 if (comboBoxOption.Id == boxIdentity.ParentOptionId)
                 {
-                    //identity = boxIdentity;
                     UIElement box = boxIdentity.ComboBox;
                     box.Visibility = Visibility.Visible;
 
@@ -276,7 +274,6 @@ namespace Dynamic_buttons_test_2
                 }
             }
         }
-
         private void ButtonXmlSave_OnClick(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("Xml was saved. Or that is, it would be had the code been written for it");

@@ -28,7 +28,7 @@
                 </Grid.ColumnDefinitions>
                 <Label Name="ContentName" Grid.Column="2" FontSize="20" Content="Choose content" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 <Button Name="ButtonComboBoxUserControl" Margin="20, 0, 0, 0" Grid.Column="0" Grid.Row="1" MinHeight="30" Content="Create ComboBox" Click="ComboBoxUserControl_OnClick"/>
-                <Button Name="ButtonTextBoxUserControl" Margin="20, 10, 0, 0" Grid.Column="0" Grid.Row="2" MinHeight="30" Content="Create TextBox"/>
+                <Button Name="ButtonTextBoxUserControl" Margin="20, 10, 0, 0" Grid.Column="0" Grid.Row="2" MinHeight="30" Content="Create TextBox" Click="ButtonTextBoxUserControl_Click"/>
             </Grid>
         </Grid>
     </Grid>

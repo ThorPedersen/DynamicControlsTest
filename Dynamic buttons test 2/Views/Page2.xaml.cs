@@ -20,7 +20,8 @@ namespace Dynamic_buttons_test_2.Views
         public ObservableCollection<LabelIdentity> LabelIdentityList = new ObservableCollection<LabelIdentity>();
         public ObservableCollection<TextBoxIdentity> TextBoxIdentityList = new ObservableCollection<TextBoxIdentity>();
 
-        TestUserControl _testUserControl;
+        private ComboBoxUserControl _comboBoxUserControl;
+        private TextBoxUserControl _textBoxUserControl;
 
         private int _gridRow;
         private readonly int _gridColumnLabel;
@@ -34,7 +35,8 @@ namespace Dynamic_buttons_test_2.Views
         public Page2()
         {
             Editor = false;
-            _testUserControl = new TestUserControl(ComboBoxOptionsList, ComboBoxIdentityList);
+            _comboBoxUserControl = new ComboBoxUserControl(ComboBoxOptionsList, ComboBoxIdentityList);
+            _textBoxUserControl = new TextBoxUserControl(ComboBoxOptionsList, ComboBoxIdentityList, TextBoxIdentityList);
 
             InitializeComponent();
 
@@ -42,41 +44,8 @@ namespace Dynamic_buttons_test_2.Views
             _editorColumm = 0;
 
             _gridRow = 2;
-            _gridColumnLabel = 1;
-            _gridColumnObject = 2;
-
-            //ObservableCollection<ComboBoxOption> bindingList2 = new ObservableCollection<ComboBoxOption>();
-            //BindingListAdding("4", "", "", bindingList2);
-            //BindingListAdding("5", "Testafter1", "Testafter1", bindingList2);
-            //BindingListAdding("6", "Testafter2", "Testafter2", bindingList2);
-            //BindingListAdding("7", "Testafter3", "Testafter3", bindingList2);
-            ////first parameter is label id, second is name for combobox and label, thirds is content of the label, fourth is the combobox items
-            ////fifth is its ComboboxId, sixth is parentId, seventh is ParentOptionId
-            //ComboBoxAndLabelSetup("2", "Newtool", "New tool", bindingList2, "2222", null, null);
-        }
-
-        private void Needbindingsomething()
-        {
-            _testUserControl = new TestUserControl(ComboBoxOptionsList, ComboBoxIdentityList);
-
-            //if (_testUserControl.BtnAddCombobox.IsPressed)
-            //{
-
-            foreach (var var in _testUserControl.ListBox.ItemsSource)
-            {
-                ComboBoxOption newComboOption = new ComboBoxOption();
-                newComboOption.Id = new Guid().ToString();
-                newComboOption.DisplayName = var.ToString();
-                newComboOption.Value = new Guid().ToString();
-
-                ComboBoxOptionsList.Add(newComboOption);
-            }
-            ComboBoxAndLabelSetup(new Guid().ToString(), "lbl" + _testUserControl.LblComboBoxName.Name, _testUserControl.LblComboBoxName.Name, ComboBoxOptionsList, new Guid().ToString(), _testUserControl.CbParents.SelectedValue.ToString(), _testUserControl.CbParentOptions.SelectedValue.ToString());
-            //}
-        }
-        private void BindingListAdding(string id, string displayName, string value, ObservableCollection<ComboBoxOption> bindingList)
-        {
-            bindingList.Add(new ComboBoxOption { Id = id, DisplayName = displayName, Value = value });
+            _gridColumnLabel = 2;
+            _gridColumnObject = 3;
         }
         private TextBox AddTextBox(string id, string name, string content, string parentId, string parentOptionId)
         {
@@ -189,7 +158,7 @@ namespace Dynamic_buttons_test_2.Views
 
             _gridRow++;
         }
-        private void TextboxAndLabelSetup(string labelId, string name, string textboxContent, string labelContent, string textboxId, string parentId, string parentOptionId)
+        public void TextboxAndLabelSetup(string labelId, string name, string textboxContent, string labelContent, string textboxId, string parentId, string parentOptionId)
         {
             AddRow(AddLabel(labelId, "lbl" + name, labelContent, parentId, parentOptionId));
             AddRow(AddTextBox(textboxId, "TxtBox" + name, textboxContent, parentId, parentOptionId));
@@ -200,7 +169,7 @@ namespace Dynamic_buttons_test_2.Views
             RowDefinition newRow = new RowDefinition
             {
                 Height = GridLength.Auto,
-                MinHeight = 40
+                MinHeight = 80
             };
             GridToSave.RowDefinitions.Add(newRow);
 
@@ -282,41 +251,53 @@ namespace Dynamic_buttons_test_2.Views
         }
 
         private void ComboBoxUserControl_OnClick(object sender, RoutedEventArgs e)
-        {        
-            if (GridToSave.Children.Contains(_testUserControl))
+        {
+            if (GridToSave.Children.Contains(_comboBoxUserControl))
             {
-                GridToSave.Children.Remove(_testUserControl);
+                GridToSave.Children.Remove(_comboBoxUserControl);
+            }
+
+            else
+            {
+                ComboBoxUserControl comboBoxUserControl = new ComboBoxUserControl(ComboBoxOptionsList, ComboBoxIdentityList);
+                _comboBoxUserControl = comboBoxUserControl;
+
+                Grid.SetRow(_comboBoxUserControl, _editorRow);
+                Grid.SetColumnSpan(_comboBoxUserControl, 2);
+                Grid.SetColumn(_comboBoxUserControl, _editorColumm);
+
+                _comboBoxUserControl.Margin = new Thickness(10, 20, 0, 0);
+
+                GridToSave.Children.Add(_comboBoxUserControl);
+            }
+            if (GridToSave.Children.Contains(_textBoxUserControl))
+            {
+                GridToSave.Children.Remove(_textBoxUserControl);
+            }
+        }
+        private void ButtonTextBoxUserControl_Click(object sender, RoutedEventArgs e)
+        {
+            if (GridToSave.Children.Contains(_textBoxUserControl))
+            {
+                GridToSave.Children.Remove(_textBoxUserControl);
             }
             else
             {
-                TestUserControl testUserControl = new TestUserControl(ComboBoxOptionsList, ComboBoxIdentityList);
-                _testUserControl = testUserControl;
+                TextBoxUserControl textBoxUserControl = new TextBoxUserControl(ComboBoxOptionsList, ComboBoxIdentityList, TextBoxIdentityList);
+                _textBoxUserControl = textBoxUserControl;
 
-                Grid.SetRow(_testUserControl, _editorRow);
-                Grid.SetColumnSpan(_testUserControl, 2);
-                Grid.SetColumn(_testUserControl, _editorColumm);
+                Grid.SetRow(_textBoxUserControl, _editorRow);
+                Grid.SetColumnSpan(_textBoxUserControl, 2);
+                Grid.SetColumn(_textBoxUserControl, _editorColumm);
 
-                _testUserControl.Margin = new Thickness(10, 20, 0, 0);
+                _textBoxUserControl.Margin = new Thickness(10, 20, 0, 0);
 
-                GridToSave.Children.Add(_testUserControl);
+                GridToSave.Children.Add(_textBoxUserControl);
+            }
+            if (GridToSave.Children.Contains(_comboBoxUserControl))
+            {
+                GridToSave.Children.Remove(_comboBoxUserControl);
             }
         }
-        //private void TextBoxUserControl_OnClick(object sender, RoutedEventArgs e)
-        //{
-        //    if (GridToSave.Children.Contains(_test2UserControl))
-        //    {
-        //        GridToSave.Children.Remove(_test2UserControl);
-        //    }
-        //    else
-        //    {
-        //        Grid.SetRow(_test2UserControl, _editorRow);
-        //        Grid.SetColumnSpan(_test2UserControl, 2);
-        //        Grid.SetColumn(_test2UserControl, _editorColumm);
-
-        //        _test2UserControl.Margin = new Thickness(10, 20, 0, 0);
-
-        //        GridToSave.Children.Add(_test2UserControl);
-        //    }
-        //}
     }
 }
