@@ -85,6 +85,7 @@ namespace Dynamic_buttons_test_2.Views
             if (parentId != null)
             {
                 standardName.Visibility = Visibility.Collapsed;
+                dockPanel.Visibility = Visibility.Collapsed;
 
                 foreach (var boxIdentity in ComboBoxIdentityList)
                 {
@@ -138,7 +139,7 @@ namespace Dynamic_buttons_test_2.Views
 
             return labelName;
         }
-        private ComboBox AddComboBox(string id, ObservableCollection<ComboBoxOption> bindingList, string name, string parentId, string parentOptionId, Panel panel)
+        private ComboBox AddComboBox(string id, ObservableCollection<ComboBoxOption> bindingList, string name, string parentId, string parentOptionId, Panel dockPanel)
         {
             //var wb = new WebService();
             //wb.AddComboBox(id, bindingList, child, name, parentId);
@@ -160,26 +161,26 @@ namespace Dynamic_buttons_test_2.Views
                 ComboBoxChildren = new List<UIElement>(),
                 ParentId = parentId,
                 ParentOptionId = parentOptionId,
-                ParentPanelId = panel.Uid
+                ParentPanelId = dockPanel.Uid
             };
-            //DockPanelIdentity Panel = new DockPanelIdentity
-            //{
-            //    Id = Guid.NewGuid().ToString(),
-            //    Name = "Dp" + name,
-            //    Panel = dockPanel
-            //};
+            DockPanelIdentity panel = new DockPanelIdentity
+            {
+                Id = dockPanel.Uid,
+                Name = "Dp" + name,
+                Panel = dockPanel
+            };
             if (parentId != null)
             {
                 comboBox.Visibility = Visibility.Collapsed;
 
                 ComboBoxIdentity comboBoxIdentity = ComboBoxIdentityList.First(x => x.Id == parentId);
                 comboBoxIdentity.ComboBoxChildren.Add(comboBox);
-                //dockPanel.Visibility = Visibility.Collapsed;
+                dockPanel.Visibility = Visibility.Collapsed;
             }
 
             comboBox.SelectionChanged += combo_SelectionChanged;
             ComboBoxIdentityList.Add(combo);
-            //DockPanelIdentityList.Add(Panel);
+            DockPanelIdentityList.Add(panel);
             ComboboxList.Add(comboBox);
             return comboBox;
         }
@@ -192,9 +193,18 @@ namespace Dynamic_buttons_test_2.Views
                 Name = "Dp" + name,
                 Uid = Guid.NewGuid().ToString()
             };
-            
+            Button newButton = new Button
+            {
+                Name = "btn" + name,
+                Content = "Delete",
+                Margin = new Thickness(0, 0, 20, 0),
+                Uid = newDockPanel.Uid
+            };
+            newButton.Click += btnDelete_Click;
+
             AddRow(AddLabel(labelId, "lbl" + name, labelContent, parentId, parentOptionId, newDockPanel), newDockPanel);
             AddRow(AddComboBox(comboBoxId, items, "CB" + name, parentId, parentOptionId, newDockPanel), newDockPanel);
+            AddRow(newButton, newDockPanel);
             _gridRow++;
         }
         public void TextboxAndLabelSetup(string labelId, string name, string textboxContent, string labelContent, string textboxId, string parentId, string parentOptionId)
@@ -268,33 +278,11 @@ namespace Dynamic_buttons_test_2.Views
                 Grid.SetColumn(newDockPanel, _dockPanelColumn);
                 StackPanelName.Children.Add(newDockPanel);
             }
-            //var label = gridControl as Label;
-
             if (gridControl.GetType() == typeof (Label))
             {
                 DockPanel.SetDock(gridControl, Dock.Left);              
             }
             newDockPanel.Children.Add(gridControl);
-
-
-            //RowDefinition newRow = new RowDefinition
-            //{
-            //    Height = GridLength.Auto,
-            //    MinHeight = 80
-            //};
-            //GridToSave.RowDefinitions.Add(newRow);
-
-            //Grid.SetRow((UIElement)gridControl, _gridRow);
-            //var label = gridControl as Label;
-            //if (label != null)
-            //{
-            //    Grid.SetColumn(label, _gridColumnLabel);
-            //}
-            //else
-            //{
-            //    Grid.SetColumn((UIElement)gridControl, _gridColumnObject);
-            //}
-            //GridToSave.Children.Add((UIElement)gridControl);
         }
         private void combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -310,12 +298,12 @@ namespace Dynamic_buttons_test_2.Views
 
             foreach (TextBoxIdentity textBoxIdentity in TextBoxIdentityList)
             {
+                var variableForPanel = DockPanelIdentityList.First(x => x.Id == textBoxIdentity.ParentPanelId);
+                Panel panel = variableForPanel.Panel;
+                panel.Visibility = Visibility.Visible;
+
                 if (comboBoxOption.Id == textBoxIdentity.ParentOptionId)
                 {
-                    var panelIdentity = DockPanelIdentityList.First(x => Equals(x.Id, textBoxIdentity.ParentPanelId));
-                    Panel panel = panelIdentity.Panel;
-                    
-                    panel.Visibility = Visibility.Visible;
 
                     //identity = boxIdentity;
                     UIElement box = textBoxIdentity.TextBox;
@@ -330,15 +318,20 @@ namespace Dynamic_buttons_test_2.Views
 
                     comboBoxIdentity.ComboBoxChildren.Add(box);
                     comboBoxIdentity.ComboBoxChildren.Add(label);
-
-                    //break;
+                }
+                if (textBoxIdentity.TextBox.IsVisible == false)
+                {
+                    panel.Visibility = Visibility.Collapsed;
                 }
             }
             foreach (ComboBoxIdentity boxIdentity in ComboBoxIdentityList)
             {
+                var variableForPanel = DockPanelIdentityList.First(x => x.Id == boxIdentity.ParentPanelId);
+                Panel panel = variableForPanel.Panel;
+                panel.Visibility = Visibility.Visible;
+
                 if (comboBoxOption.Id == boxIdentity.ParentOptionId)
                 {
-                    //identity = boxIdentity;
                     UIElement box = boxIdentity.ComboBox;
                     box.Visibility = Visibility.Visible;
 
@@ -353,8 +346,6 @@ namespace Dynamic_buttons_test_2.Views
 
                     comboBoxIdentity.ComboBoxChildren.Add(box);
                     comboBoxIdentity.ComboBoxChildren.Add(label);
-
-                    //break;
                 }
                 if (boxIdentity.ComboBox.IsVisible == false)
                 {
@@ -362,10 +353,10 @@ namespace Dynamic_buttons_test_2.Views
                     {
                         element.Visibility = Visibility.Collapsed;
                     }
+                    panel.Visibility = Visibility.Collapsed;
                 }
             }
         }
-
         private void ComboBoxUserControl_OnClick(object sender, RoutedEventArgs e)
         {
             if (GridToSave.Children.Contains(_comboBoxUserControl))
