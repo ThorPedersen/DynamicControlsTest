@@ -14,6 +14,7 @@ namespace Dynamic_buttons_test_2.Models
         public string Id { get; set; }
         public string ParentId { get; set; }
         public string ParentOptionId { get; set; }
+        public string ParentPanelId { get; set; }
         public ComboBox ComboBox { get; set; }
 
         public List<UIElement> ComboBoxChildren { get; set; } 

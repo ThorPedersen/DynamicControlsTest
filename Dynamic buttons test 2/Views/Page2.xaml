@@ -16,19 +16,15 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
-                    <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Label Name="ContentName" Grid.Column="2" FontSize="20" Content="Choose content" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                <Button Name="ButtonComboBoxUserControl" Margin="20, 0, 0, 0" Grid.Column="0" Grid.Row="1" MinHeight="30" Content="Create ComboBox" Click="ComboBoxUserControl_OnClick"/>
-                <Button Name="ButtonTextBoxUserControl" Margin="20, 10, 0, 0" Grid.Column="0" Grid.Row="2" MinHeight="30" Content="Create TextBox" Click="ButtonTextBoxUserControl_Click"/>
+                <StackPanel Name="StackPanelName" Grid.Row="3" Grid.Column="1"></StackPanel>
+                <Label Name="ContentName" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" FontSize="20" Content="Choose content" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                <Button Name="ButtonComboBoxUserControl" HorizontalAlignment="Left" Width="200" Margin="100, 0, 0, 0" Grid.Column="0" Grid.Row="1" MinHeight="30" Content="Create ComboBox" Click="ComboBoxUserControl_OnClick"/>
+                <Button Name="ButtonTextBoxUserControl" HorizontalAlignment="Left" Width="200" Margin="100, 10, 0, 0" Grid.Column="0" Grid.Row="2" MinHeight="30" Content="Create TextBox" Click="ButtonTextBoxUserControl_Click"/>
             </Grid>
         </Grid>
     </Grid>

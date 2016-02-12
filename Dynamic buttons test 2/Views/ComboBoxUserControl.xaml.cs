@@ -95,8 +95,7 @@ namespace Dynamic_buttons_test_2
 
             MessageBox.Show("ComboBox Added!");
 
-            CBParents.ItemsSource = null;
-            //CBParents.ItemsSource = _listBoxes;
+            CBParents.Items.Clear();
             foreach (var boxes in _listComboBoxIdentities)
             {
                 var name = boxes.ComboBox.Name.Remove(0, 2);

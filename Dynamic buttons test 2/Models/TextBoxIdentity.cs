@@ -12,6 +12,7 @@ namespace Dynamic_buttons_test_2.Models
     {
         public string Id { get; set; }
         public string ParentOptionId { get; set; }
+        public string ParentPanelId { get; set; }
         public TextBox TextBox { get; set; }
         public List<UIElement> TextBoxChildren { get; set; }
         public TextBoxIdentity(TextBox textBox)

@@ -79,7 +79,7 @@ namespace Dynamic_buttons_test_2.Views
 
             string lablename = TxtboxTextBoxName.Text.Replace(" ", "");
 
-            (parent as Page2).TextboxAndLabelSetup(Guid.NewGuid().ToString(), lablename, TxtboxTextBoxName.Text, TxtboxTextBoxContent.Text, Guid.NewGuid().ToString(), parentId, parentOptionId);
+            (parent as Page2).TextboxAndLabelSetup(Guid.NewGuid().ToString(), lablename, TxtboxTextBoxContent.Text, TxtboxTextBoxName.Text, Guid.NewGuid().ToString(), parentId, parentOptionId);
 
             MessageBox.Show("TextBox added!");
 
@@ -87,7 +87,10 @@ namespace Dynamic_buttons_test_2.Views
             foreach (var boxes in _listComboBoxIdentities)
             {
                 var name = boxes.ComboBox.Name.Remove(0, 2);
-                CBParents.Items.Add(name);
+                if (!_listComboBoxIdentities.Contains(boxes))
+                {
+                    CBParents.Items.Add(name);
+                }
             }
 
             TxtboxTextBoxName.Clear();
