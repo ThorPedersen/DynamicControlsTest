@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -36,7 +37,7 @@ namespace Dynamic_buttons_test_2.Views
 
         public Page2()
         {
-            _dockpanelRow = 3;
+            _dockpanelRow = 4;
             _dockPanelColumn = 1;
 
             _comboBoxUserControl = new ComboBoxUserControl(ComboBoxOptionsList, ComboBoxIdentityList);
@@ -44,7 +45,7 @@ namespace Dynamic_buttons_test_2.Views
 
             InitializeComponent();
 
-            _editorRow = 3;
+            _editorRow = 4;
             _editorColumm = 0;
 
         }
@@ -453,7 +454,8 @@ namespace Dynamic_buttons_test_2.Views
         private void BtnConfiguration_OnClick(object sender, RoutedEventArgs e)
         {
             //this.NavigationService?.Navigate(new Uri("Views/Page1.xaml?parameter=test", UriKind.Relative));
-            this.NavigationService.Navigate(new Page1(ConfigurationIdentityList));
+            Debug.Assert(NavigationService != null, "NavigationService != null");
+            NavigationService.Navigate(new Page1(ConfigurationIdentityList));
         }
     }
 }
