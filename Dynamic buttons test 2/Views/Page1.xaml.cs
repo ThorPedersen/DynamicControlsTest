@@ -4,9 +4,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Navigation;
 using Dynamic_buttons_test_2.Models;
 
-namespace Dynamic_buttons_test_2
+namespace Dynamic_buttons_test_2.Views
 {
     /// <summary>
     /// Interaction logic for Page1.xaml
@@ -25,11 +27,17 @@ namespace Dynamic_buttons_test_2
 
         public Page1()
         {
-            InitializeComponent();
+            //InitializeComponent();
 
             _gridRow = 2;
             _gridColumnLabel = 1;
             _gridColumnObject = 2;
+
+            string parameter = string.Empty;
+            //if (NavigationContext.QueryString.TryGetValue("parameter", out parameter))
+            //{
+            //    MessageBox.Show(parameter);
+            //}
 
             // First parameter is ID for label, second is name for textbox and label, third is the content of the textbox
             //the fourth is the content of the label, the fifth is TextBoxId, sixth is its ParentID, seventh is its ParentOptionId
@@ -70,9 +78,14 @@ namespace Dynamic_buttons_test_2
             TextboxAndLabelSetup("99", "Fejlgrid", "Fejlgrid", "Fejlgrid", new Guid().ToString(), null, null);
 
         }
+        protected void OnNavigatedTo(NavigationEventArgs e)
+        {
+            IDictionary<string, string> parameters = NavigationC
+        }
         private void BindingListAdding(string id, string displayName, string value, List<ComboBoxOption> bindingList)
         {
             bindingList.Add(new ComboBoxOption { Id = id, DisplayName = displayName, Value = value });
+            
         }
         private TextBox AddTextBox(string id, string name, string content, string parentId, string parentOptionId)
         {
@@ -274,9 +287,9 @@ namespace Dynamic_buttons_test_2
                 }
             }
         }
-        private void ButtonXmlSave_OnClick(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Xml was saved. Or that is, it would be had the code been written for it");
-        }
+        //private void ButtonXmlSave_OnClick(object sender, RoutedEventArgs e)
+        //{
+        //    MessageBox.Show("Xml was saved. Or that is, it would be had the code been written for it");
+        //}
     }
 }

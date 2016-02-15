@@ -4,10 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.Xml;
 using Dynamic_buttons_test_2.Models;
-using Dynamic_buttons_test_2.Views;
 
 namespace Dynamic_buttons_test_2.Views
 {
@@ -17,11 +14,15 @@ namespace Dynamic_buttons_test_2.Views
     public partial class Page2
     {
         public ObservableCollection<ComboBox> ComboboxList = new ObservableCollection<ComboBox>();
+        public ObservableCollection<Button> ButtonList = new ObservableCollection<Button>();
         public ObservableCollection<ComboBoxIdentity> ComboBoxIdentityList = new ObservableCollection<ComboBoxIdentity>();
         public ObservableCollection<ComboBoxOption> ComboBoxOptionsList = new ObservableCollection<ComboBoxOption>();
         public ObservableCollection<LabelIdentity> LabelIdentityList = new ObservableCollection<LabelIdentity>();
         public ObservableCollection<TextBoxIdentity> TextBoxIdentityList = new ObservableCollection<TextBoxIdentity>();
         public ObservableCollection<DockPanelIdentity> DockPanelIdentityList = new ObservableCollection<DockPanelIdentity>();
+        //public ObservableCollection<ButtonIdentity> ButtonIdentityList = new ObservableCollection<ButtonIdentity>();
+
+        public ObservableCollection<ConfigurationIdentity> ConfigurationIdentityList = new ObservableCollection<ConfigurationIdentity>();
 
         private ComboBoxUserControl _comboBoxUserControl;
         private TextBoxUserControl _textBoxUserControl;
@@ -30,32 +31,22 @@ namespace Dynamic_buttons_test_2.Views
         private readonly int _dockpanelRow;
         private readonly int _dockPanelColumn;
 
-        private int _gridRow;
-        private readonly int _gridColumnLabel;
-        private readonly int _gridColumnObject;
-
         private readonly int _editorRow;
         private readonly int _editorColumm;
-
-        public bool Editor;
 
         public Page2()
         {
             _dockpanelRow = 3;
             _dockPanelColumn = 1;
 
-            Editor = false;
             _comboBoxUserControl = new ComboBoxUserControl(ComboBoxOptionsList, ComboBoxIdentityList);
-            _textBoxUserControl = new TextBoxUserControl(ComboBoxOptionsList, ComboBoxIdentityList, TextBoxIdentityList);
+            _textBoxUserControl = new TextBoxUserControl(ComboBoxOptionsList, ComboBoxIdentityList);
 
             InitializeComponent();
 
             _editorRow = 3;
             _editorColumm = 0;
 
-            //_gridRow = 2;
-            //_gridColumnLabel = 2;
-            //_gridColumnObject = 3;
         }
         private TextBox AddTextBox(string id, string name, string content, string parentId, string parentOptionId, DockPanel dockPanel)
         {
@@ -202,10 +193,21 @@ namespace Dynamic_buttons_test_2.Views
             };
             newButton.Click += btnDelete_Click;
 
-            AddRow(AddLabel(labelId, "lbl" + name, labelContent, parentId, parentOptionId, newDockPanel), newDockPanel);
-            AddRow(AddComboBox(comboBoxId, items, "CB" + name, parentId, parentOptionId, newDockPanel), newDockPanel);
-            AddRow(newButton, newDockPanel);
-            _gridRow++;
+            AddDockPanel(AddLabel(labelId, "lbl" + name, labelContent, parentId, parentOptionId, newDockPanel), newDockPanel);
+            AddDockPanel(AddComboBox(comboBoxId, items, "CB" + name, parentId, parentOptionId, newDockPanel), newDockPanel);
+            AddDockPanel(newButton, newDockPanel);
+
+            ConfigurationIdentity configurationIdentity = new ConfigurationIdentity
+            {
+                LabelId = labelId,
+                TextBoxOrComputerName = name,
+                LabelContent = labelContent,
+                Items = items,
+                ComboBoxId = comboBoxId,
+                ParentId = parentId,
+                ParentOptionId = parentOptionId
+            };
+            ConfigurationIdentityList.Add(configurationIdentity);
         }
         public void TextboxAndLabelSetup(string labelId, string name, string textboxContent, string labelContent, string textboxId, string parentId, string parentOptionId)
         {
@@ -219,20 +221,40 @@ namespace Dynamic_buttons_test_2.Views
             {
                 Name = "btn" + name,
                 Content = "Delete",
-                Margin = new Thickness(0,0,20,0),
+                Margin = new Thickness(0, 0, 20, 0),
                 Uid = newDockPanel.Uid
             };
             newButton.Click += btnDelete_Click;
 
-            AddRow(AddLabel(labelId, "lbl" + name, labelContent, parentId, parentOptionId, newDockPanel), newDockPanel);
-            AddRow(AddTextBox(textboxId, "TxtBox" + name, textboxContent, parentId, parentOptionId, newDockPanel), newDockPanel);
-            AddRow(newButton, newDockPanel);
-            _gridRow++;
+            AddDockPanel(AddLabel(labelId, "lbl" + name, labelContent, parentId, parentOptionId, newDockPanel), newDockPanel);
+            AddDockPanel(AddTextBox(textboxId, "TxtBox" + name, textboxContent, parentId, parentOptionId, newDockPanel), newDockPanel);
+            AddDockPanel(newButton, newDockPanel);
+
+            ConfigurationIdentity configurationIdentity = new ConfigurationIdentity
+            {
+                LabelId = labelId,
+                TextBoxOrComputerName = name,
+                TextBoxContent = textboxContent,
+                LabelContent = labelContent,
+                TextboxId = textboxId,
+                ParentId = parentId,
+                ParentOptionId = parentOptionId
+            };
+            ConfigurationIdentityList.Add(configurationIdentity);
         }
 
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
-            Button button = (Button) sender;
+            Button button = (Button)sender;
+
+            //ButtonIdentity buttonIdentity = new ButtonIdentity
+            //{
+            //    Id = Guid.NewGuid().ToString(),
+            //    Button = button
+            //};
+            //ButtonIdentityList.Add(buttonIdentity);
+
+            ButtonList.Add(button);
 
             var panelIdentity = DockPanelIdentityList.First(x => Equals(x.Id, button.Uid));
             Panel panel = panelIdentity.Panel;
@@ -241,6 +263,16 @@ namespace Dynamic_buttons_test_2.Views
             if (ComboBoxIdentityList.Any(x => x.ParentPanelId == button.Uid))
             {
                 comboBoxIdentity = ComboBoxIdentityList.First(x => Equals(x.ParentPanelId, button.Uid));
+
+                if (comboBoxIdentity.ComboBoxChildren.Count > 0)
+                {
+                    //smart algorythm to delete all children within children within children ad infinitum until all children are removed.
+                    //List<UIElement> list = comboBoxIdentity.ComboBoxChildren;
+                    //foreach (var l in list)
+                    //{
+
+                    //}
+                }
             }
             LabelIdentity labelIdentity = null;
             if (LabelIdentityList.Any(x => x.ParentPanelId == button.Uid))
@@ -252,6 +284,7 @@ namespace Dynamic_buttons_test_2.Views
             {
                 textboxIdentity = TextBoxIdentityList.First(x => Equals(x.ParentPanelId, button.Uid));
             }
+
 
             if (comboBoxIdentity != null)
             {
@@ -267,20 +300,20 @@ namespace Dynamic_buttons_test_2.Views
             }
 
             panel.Children.Clear();
-            
-            StackPanelName.Children.Remove(panel);
+
+            SpContent.Children.Remove(panel);
         }
-        private void AddRow(UIElement gridControl, DockPanel newDockPanel)
+        private void AddDockPanel(UIElement gridControl, DockPanel newDockPanel)
         {
-            if (!StackPanelName.Children.Contains(newDockPanel))
+            if (!SpContent.Children.Contains(newDockPanel))
             {
                 Grid.SetRow(newDockPanel, _dockpanelRow);
                 Grid.SetColumn(newDockPanel, _dockPanelColumn);
-                StackPanelName.Children.Add(newDockPanel);
+                SpContent.Children.Add(newDockPanel);
             }
-            if (gridControl.GetType() == typeof (Label))
+            if (gridControl.GetType() == typeof(Label))
             {
-                DockPanel.SetDock(gridControl, Dock.Left);              
+                DockPanel.SetDock(gridControl, Dock.Left);
             }
             newDockPanel.Children.Add(gridControl);
         }
@@ -295,7 +328,17 @@ namespace Dynamic_buttons_test_2.Views
             {
                 element.Visibility = Visibility.Collapsed;
             }
-
+            //foreach (var dockPanelIdentity in DockPanelIdentityList)
+            //{
+            //    if (dockPanelIdentity.Panel.IsVisible == false)
+            //    {
+            //        dockPanelIdentity.Panel.Visibility = Visibility.Collapsed;
+            //    }
+            //    else
+            //    {
+            //        dockPanelIdentity.Panel.Visibility = Visibility.Visible;
+            //    }
+            //}
             foreach (TextBoxIdentity textBoxIdentity in TextBoxIdentityList)
             {
                 var variableForPanel = DockPanelIdentityList.First(x => x.Id == textBoxIdentity.ParentPanelId);
@@ -390,7 +433,7 @@ namespace Dynamic_buttons_test_2.Views
             }
             else
             {
-                TextBoxUserControl textBoxUserControl = new TextBoxUserControl(ComboBoxOptionsList, ComboBoxIdentityList, TextBoxIdentityList);
+                TextBoxUserControl textBoxUserControl = new TextBoxUserControl(ComboBoxOptionsList, ComboBoxIdentityList);
                 _textBoxUserControl = textBoxUserControl;
 
                 Grid.SetRow(_textBoxUserControl, _editorRow);
@@ -405,6 +448,12 @@ namespace Dynamic_buttons_test_2.Views
             {
                 GridToSave.Children.Remove(_comboBoxUserControl);
             }
+        }
+
+        private void BtnConfiguration_OnClick(object sender, RoutedEventArgs e)
+        {
+            //this.NavigationService?.Navigate(new Uri("Views/Page1.xaml?parameter=test", UriKind.Relative));
+            this.NavigationService.Navigate(new Page1(ConfigurationIdentityList));
         }
     }
 }

@@ -7,11 +7,9 @@ using System.Windows.Controls;
 
 namespace Dynamic_buttons_test_2.Models
 {
-    public class DockPanelIdentity
+    public class ButtonIdentity
     {
         public string Id { get; set; }
-        public string Name { get; set; }
-        public Panel Panel { get; set; }
-        public List<Button> ButtonChildren { get; set; }
+        public Button Button { get; set; }  
     }
 }

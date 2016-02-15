@@ -60,6 +60,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\ConfigurationIdentity.cs" />
     <Compile Include="Models\DockPanelIdentity.cs" />
     <Compile Include="Models\SaveToGrid.cs" />
     <Compile Include="Views\ComboBoxUserControl.xaml.cs">

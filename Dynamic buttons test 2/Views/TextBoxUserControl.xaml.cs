@@ -24,20 +24,15 @@ namespace Dynamic_buttons_test_2.Views
     {
         private readonly List<string> _listBoxes = new List<string>();
         private readonly ObservableCollection<ComboBoxOption> _listOptions;
-        private readonly ObservableCollection<ComboBoxIdentity> _listComboBoxIdentities;
-        //private readonly ObservableCollection<TextBoxIdentity> _listTextBoxIdentities;
-
-        //private readonly ObservableCollection<ComboBoxOption> _parentOptions =
-        //    new ObservableCollection<ComboBoxOption>();
+        private readonly ObservableCollection<ComboBoxIdentity> _listComboBoxIdentity;
 
         public TextBoxUserControl(ObservableCollection<ComboBoxOption> options,
-            ObservableCollection<ComboBoxIdentity> comboBoxes, ObservableCollection<TextBoxIdentity> textboxes)
+            ObservableCollection<ComboBoxIdentity> comboBoxes)
         {
             InitializeComponent();
 
             _listOptions = options;
-            _listComboBoxIdentities = comboBoxes;
-            //_listTextBoxIdentities = textboxes;
+            _listComboBoxIdentity = comboBoxes;
 
             _listBoxes.Add("");
 
@@ -64,7 +59,7 @@ namespace Dynamic_buttons_test_2.Views
             {
                 string selectedvalue = "CB" + CBParents.SelectionBoxItem;
 
-                ComboBoxIdentity result = _listComboBoxIdentities.First(q => Equals(q.ComboBox.Name, selectedvalue));
+                ComboBoxIdentity result = _listComboBoxIdentity.First(q => Equals(q.ComboBox.Name, selectedvalue));
 
                 parentId = result.Id;
             }
@@ -84,10 +79,10 @@ namespace Dynamic_buttons_test_2.Views
             MessageBox.Show("TextBox added!");
 
             CBParents.ItemsSource = null;
-            foreach (var boxes in _listComboBoxIdentities)
+            foreach (var boxes in _listComboBoxIdentity)
             {
                 var name = boxes.ComboBox.Name.Remove(0, 2);
-                if (!_listComboBoxIdentities.Contains(boxes))
+                if (!_listComboBoxIdentity.Contains(boxes))
                 {
                     CBParents.Items.Add(name);
                 }
@@ -103,7 +98,7 @@ namespace Dynamic_buttons_test_2.Views
 
             if (!string.IsNullOrEmpty(item) && item != "CB")
             {
-                ComboBoxIdentity bob1 = _listComboBoxIdentities.First(q => Equals(q.ComboBox.Name, item));
+                ComboBoxIdentity bob1 = _listComboBoxIdentity.First(q => Equals(q.ComboBox.Name, item));
 
                 CBParentOptions.ItemsSource = bob1.ComboBox.ItemsSource;
                 CBParentOptions.DisplayMemberPath = "DisplayName";
